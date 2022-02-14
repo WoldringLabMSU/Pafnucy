@@ -1,5 +1,7 @@
 [![pipeline status](https://gitlab.com/cheminfIBB/pafnucy/badges/master/pipeline.svg)](https://gitlab.com/cheminfIBB/pafnucy/commits/master)
 
+**This is an unofficial modification to [Pafnucy](https://gitlab.com/cheminfIBB/pafnucy)**
+
 **Pafnucy [paphnusy]** is a 3D convolutional neural network that predicts binding affinity for protein-ligand complexes.
 It was trained on the [PDBbind](http://pubs.acs.org/doi/abs/10.1021/acs.accounts.6b00491) database and tested on the [CASF](http://pubs.acs.org/doi/pdf/10.1021/ci500081m) "scoring power" benchmark.
 
