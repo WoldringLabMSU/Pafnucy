@@ -49,7 +49,7 @@ def input_dir(path):
 
 
 def sign_to_pafnucy_features(features):
-    new_features = np.zeros((len(features), 19))
+    new_features = np.zeros((len(features), 19), dtype=np.float32)
     indices = np.hstack((np.arange(13), np.arange(14, 19)))
     new_features[:, indices] = features[:, :18] + features[:, 18:]
     is_ligand = (np.sum(features[:, :18], axis=1) != 0).astype(int) * 2 - 1
