@@ -408,9 +408,7 @@ predictions.to_csv(prefix + '-predictions.csv', index=False)
 
 for set_name, tab in predictions.groupby('set'):
     grid = sns.jointplot('real', 'predicted', data=tab, color=color[set_name],
-                         space=0.0, xlim=(0, 16), ylim=(0, 16),
-                         annot_kws={'title': '%s set (rmse=%.3f)'
-                                             % (set_name, rmse[set_name])})
+                         space=0.0, xlim=(0, 16), ylim=(0, 16))
 
     image = tfbio.net.custom_summary_image(grid.fig)
     grid.fig.savefig(prefix + '-%s.pdf' % set_name)
