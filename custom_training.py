@@ -40,8 +40,8 @@ def input_dir(path):
     path = os.path.abspath(path)
     if not os.path.isdir(path):
         raise IOError('Incorrect input_dir specified: no such directory')
-    for dataset_name in datasets:
-        dataset_path = os.path.join(path, '%s.pkl' % dataset_name)
+    for dataset_name, prefix in zip(datasets, dataset_prefix):
+        dataset_path = os.path.join(path, '%s.pkl' % prefix)
         if not os.path.exists(dataset_path):
             raise IOError('Incorrect input_dir specified:'
                           ' %s set file not found' % dataset_path)
