@@ -29,7 +29,8 @@ import time
 timestamp = time.strftime('%Y-%m-%dT%H:%M:%S')
 
 
-datasets = ['63k_train', '63k_val', '63k_test']
+datasets = ['training', 'validation', 'test']
+dataset_prefix = ['63k_train', '63k_val', '63k_test']
 
 
 def input_dir(path):
@@ -125,8 +126,8 @@ for dictionary in [ids, affinity, coords, features]:
     for dataset_name in datasets:
         dictionary[dataset_name] = []
 
-for dataset_name in datasets:
-    dataset_path = os.path.join(args.input_dir, '%s.pkl' % dataset_name)
+for dataset_name, prefix in zip(datasets, dataset_prefix):
+    dataset_path = os.path.join(args.input_dir, '%s.pkl' % prefix)
     with open(dataset_path, 'rb') as f:
         data_mols, data_Y = pickle.load(f)
         for i in range(len(data_mols)):
