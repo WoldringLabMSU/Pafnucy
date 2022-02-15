@@ -38,7 +38,7 @@ def input_dir(path):
     if not os.path.isdir(path):
         raise IOError('Incorrect input_dir specified: no such directory')
     for dataset_name in datasets:
-        dataset_path = os.path.join(path, '%s_set.hdf' % dataset_name)
+        dataset_path = os.path.join(path, '%s.pkl' % dataset_name)
         if not os.path.exists(dataset_path):
             raise IOError('Incorrect input_dir specified:'
                           ' %s set file not found' % dataset_path)
