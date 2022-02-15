@@ -46,6 +46,15 @@ def input_dir(path):
                           ' %s set file not found' % dataset_path)
     return path
 
+
+def sign_to_pafnucy_features(features):
+    new_features = np.zeros((len(features), 19))
+    new_features[:, :18] = features[:, :18] + features[:, 18:]
+    is_ligand = (np.sum(features[:, :18], axis=1) != 0).astype(int) * 2 - 1
+    new_features[:, 18] = is_ligand
+    return new_features
+
+
 import argparse
 parser = argparse.ArgumentParser(
     description='Train 3D colnvolutional neural network on affinity data',
