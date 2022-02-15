@@ -115,7 +115,7 @@ for dictionary in [ids, affinity, coords, features]:
         dictionary[dataset_name] = []
 
 for dataset_name in datasets:
-    dataset_path = os.path.join(input_dir, '%s.pkl' % dataset_name)
+    dataset_path = os.path.join(args.input_dir, '%s.pkl' % dataset_name)
     with open(dataset_path, 'rb') as f:
         data_mols, data_Y = pickle.load(f)
         for i in range(len(data_mols)):
