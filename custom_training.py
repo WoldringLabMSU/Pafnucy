@@ -172,6 +172,8 @@ print('\n---- DATA ----\n')
 
 tmp = get_batch('training', range(min(50, len(features['training']))))
 
+print(tmp[:, :, :, :, columns['molcode']])
+
 assert ((tmp[:, :, :, :, columns['molcode']] == 0.0).any()
         and (tmp[:, :, :, :, columns['molcode']] == 1.0).any()
         and (tmp[:, :, :, :, columns['molcode']] == -1.0).any()).all()
