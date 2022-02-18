@@ -48,13 +48,18 @@ def input_dir(path):
     return path
 
 
-def sign_to_pafnucy_features(features):
+def sign_to_pafnucy(coords, features):
+    # Create one-hot feature for (1) ligand and (-1) protein 
     new_features = np.zeros((len(features), 19), dtype=np.float32)
     indices = np.hstack((np.arange(13), np.arange(14, 19)))
     new_features[:, indices] = features[:, :18] + features[:, 18:]
-    is_ligand = (np.sum(features[:, :18], axis=1) != 0).astype(int) * 2 - 1
+    is_ligand = (np.sum(features[:, :18], axis=1) != 0).astype(float) * 2 - 1
     new_features[:, 13] = is_ligand
-    return new_features
+    
+    # Move origin to the centroid of protein
+    centroid = coords[is_ligand == 1].mean(axis=0)
+    new_coords = coords - centroid
+    return new_coords, new_features
 
 
 import argparse
@@ -132,8 +137,9 @@ for dataset_name, prefix in zip(datasets, dataset_prefix):
     with open(dataset_path, 'rb') as f:
         data_mols, data_Y = pickle.load(f)
         for i in range(len(data_mols)):
-            coords[dataset_name].append(data_mols[i][1])
-            features[dataset_name].append(sign_to_pafnucy_features(data_mols[i][2]))
+            atom_coords, atom_features = sign_to_pafnucy(data_mols[i][1], data_mols[i][2])
+            coords[dataset_name].append(atom_coords)
+            features[dataset_name].append(atom_features)
             affinity[dataset_name].append(data_Y[i])
             ids[dataset_name].append(i)
 
@@ -171,8 +177,6 @@ def get_batch(dataset_name, indices, rotation=0):
 print('\n---- DATA ----\n')
 
 tmp = get_batch('training', range(min(50, len(features['training']))))
-
-print(tmp[:, :, :, :, columns['molcode']])
 
 assert ((tmp[:, :, :, :, columns['molcode']] == 0.0).any()
         and (tmp[:, :, :, :, columns['molcode']] == 1.0).any()
