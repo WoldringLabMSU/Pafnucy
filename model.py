@@ -108,7 +108,7 @@ def make_pafnucy_model(isize=20, in_chnls=19, osize=1,
                                     stddev=(1 / (dense_sizes[-1]**0.5))))
             b = tf.get_variable('b', shape=(osize,), dtype=tf.float32,
                                 initializer=tf.constant_initializer(1))
-            y = tf.matmul(h_fcl, w) + b
+            y = tf.add(tf.matmul(h_fcl, w), b, name='prediction')
 
         with tf.variable_scope('training'):
             global_step = tf.get_variable('global_step', shape=(),
