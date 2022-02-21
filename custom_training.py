@@ -12,6 +12,7 @@ from sklearn.utils import shuffle
 import tensorflow as tf
 
 from tfbio.data import Featurizer, make_grid, rotate
+import tfbio.net
 from model import make_pafnucy_model
 
 import os.path
