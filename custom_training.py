@@ -12,7 +12,7 @@ from sklearn.utils import shuffle
 import tensorflow as tf
 
 from tfbio.data import Featurizer, make_grid, rotate
-import tfbio.net
+from model import make_pafnucy_model
 
 import os.path
 
@@ -230,13 +230,13 @@ print(num_batches['test'], 'test batches')
 print('')
 print(args.num_epochs, 'epochs, best', args.to_keep, 'saved')
 
-graph = tfbio.net.make_SB_network(isize=isize, in_chnls=in_chnls, osize=osize,
-                                  conv_patch=args.conv_patch,
-                                  pool_patch=args.pool_patch,
-                                  conv_channels=args.conv_channels,
-                                  dense_sizes=args.dense_sizes,
-                                  lmbda=args.lmbda,
-                                  learning_rate=args.learning_rate)
+graph = make_pafnucy_model(isize=isize, in_chnls=in_chnls, osize=osize,
+                           conv_patch=args.conv_patch,
+                           pool_patch=args.pool_patch,
+                           conv_channels=args.conv_channels,
+                           dense_sizes=args.dense_sizes,
+                           lmbda=args.lmbda,
+                           learning_rate=args.learning_rate)
 
 
 train_writer = tf.summary.FileWriter(os.path.join(logdir, 'training_set'),
