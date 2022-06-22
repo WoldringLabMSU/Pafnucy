@@ -63,6 +63,23 @@ def sign_to_pafnucy(coords, features):
     return new_coords, new_features
 
 
+def load_indices(df_path, good=False):
+    train_path = df_path + '_training.csv'
+    val_path = df_path + '_validation.csv'
+    test_path = df_path + '_test.csv'
+
+    if good:
+        train_idx = pd.read_csv(train_path).query('rmsd < 1.5').index
+        val_idx = pd.read_csv(val_path).query('rmsd < 1.5').index
+        test_idx = pd.read_csv(test_path).query('rmsd < 1.5').index
+    else:
+        train_idx = pd.read_csv(train_path).index
+        val_idx = pd.read_csv(val_path).index
+        test_idx = pd.read_csv(test_path).index
+
+    return train_idx, val_idx, test_idx
+
+
 import argparse
 parser = argparse.ArgumentParser(
     description='Train 3D colnvolutional neural network on affinity data',
@@ -80,6 +97,7 @@ io_group.add_argument('--grid_spacing', '-g', default=1.0, type=float,
                       help='distance between grid points')
 io_group.add_argument('--max_dist', '-d', default=10.0, type=float,
                       help='max distance from complex center')
+io_group.add_argument('--dataframe', type=str, default='dataframe_37k')
 
 arc_group = parser.add_argument_group('Netwrok architecture')
 arc_group.add_argument('--conv_patch', default=5, type=int,
@@ -133,11 +151,18 @@ for dictionary in [ids, affinity, coords, features]:
     for dataset_name in datasets:
         dictionary[dataset_name] = []
 
+train_idx, val_idx, test_idx = load_indices(os.path.join(args.input_dir, args.dataframe))
+indices = {
+    'training': train_idx,
+    'validation': val_idx,
+    'test': test_idx
+}
+
 for dataset_name, prefix in zip(datasets, dataset_prefix):
     dataset_path = os.path.join(args.input_dir, '%s.pkl' % prefix)
     with open(dataset_path, 'rb') as f:
         data_mols, data_Y = pickle.load(f)
-        for i in range(len(data_mols)):
+        for i in indices[dataset_name]:
             atom_coords, atom_features = sign_to_pafnucy(data_mols[i][1], data_mols[i][2])
             coords[dataset_name].append(atom_coords)
             features[dataset_name].append(atom_features)
